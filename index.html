@@ -5,6 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学生证生成系统</title>
     <style>
+		/* --- 左侧导航 App 布局 --- */
+		* { 
+		    margin: 0; 
+		    padding: 0; 
+		    box-sizing: border-box; 
+		}
+		
+		html, body {
+		    height: 100%;
+		    overflow: hidden; /* 防止页面滚动 */
+		    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+		    background: #f0f2f5; /* 给页面一个背景色 */
+		}
+		
+		.app-layout {
+		    display: flex; /* 使用 Flexbox 布局 */
+		    height: 100vh; /* 布局高度占满整个屏幕 */
+		}
+		
+		.app-nav {
+		    flex: 0 0 240px; /* 左侧导航栏固定宽度 240px，不缩放 */
+		    background: #ffffff;
+		    padding: 20px;
+		    border-right: 1px solid #e5e7eb;
+		}
+		
+		.app-main {
+		    flex: 1; /* 右侧主内容区占据剩余所有空间 */
+		    overflow-y: auto; /* 如果内容超长，让主内容区自己滚动 */
+		    padding: 30px; /* 给主内容区一个内边距 */
+		}
+		
+		/* --- 导航栏内部链接样式 --- */
+		.app-nav h1 {
+		    font-size: 20px;
+		    padding: 10px;
+		    margin-bottom: 20px;
+		    display: flex;
+		    align-items: center;
+		    gap: 8px;
+		}
+		
+		.nav-list { 
+		    list-style: none; 
+		}
+		
+		.nav-list a {
+		    display: block;
+		    padding: 12px 15px;
+		    text-decoration: none;
+		    color: #374151;
+		    border-radius: 8px;
+		    font-weight: 500;
+		    margin-bottom: 5px;
+		}
+		
+		.nav-list a:hover { 
+		    background-color: #f3f4f6; 
+		}
+		
+		.nav-list a.active {
+		    background-color: #3b82f6;
+		    color: white;
+		    font-weight: 600;
+		}
+		
         * {
             margin: 0;
             padding: 0;
