@@ -5,84 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学生证生成系统</title>
     <style>
-		/* --- 左侧导航 App 布局 --- */
-		* { 
-		    margin: 0; 
-		    padding: 0; 
-		    box-sizing: border-box; 
-		}
-		
-		html, body {
-		    height: 100%;
-		    overflow: hidden; /* 防止页面滚动 */
-		    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-		    background: #f0f2f5; /* 给页面一个背景色 */
-		}
-		
-		.app-layout {
-		    display: flex; /* 使用 Flexbox 布局 */
-		    height: 100vh; /* 布局高度占满整个屏幕 */
-		}
-		
-		.app-nav {
-		    flex: 0 0 240px; /* 左侧导航栏固定宽度 240px，不缩放 */
-		    background: #ffffff;
-		    padding: 20px;
-		    border-right: 1px solid #e5e7eb;
-		}
-		
-		.app-main {
-		    flex: 1; /* 右侧主内容区占据剩余所有空间 */
-		    overflow-y: auto; /* 如果内容超长，让主内容区自己滚动 */
-		    padding: 30px; /* 给主内容区一个内边距 */
-		}
-		
-		/* --- 导航栏内部链接样式 --- */
-		.app-nav h1 {
-		    font-size: 20px;
-		    padding: 10px;
-		    margin-bottom: 20px;
-		    display: flex;
-		    align-items: center;
-		    gap: 8px;
-		}
-		
-		.nav-list { 
-		    list-style: none; 
-		}
-		
-		.nav-list a {
-		    display: block;
-		    padding: 12px 15px;
-		    text-decoration: none;
-		    color: #374151;
-		    border-radius: 8px;
-		    font-weight: 500;
-		    margin-bottom: 5px;
-		}
-		
-		.nav-list a:hover { 
-		    background-color: #f3f4f6; 
-		}
-		
-		.nav-list a.active {
-		    background-color: #3b82f6;
-		    color: white;
-		    font-weight: 600;
-		}
-		
+        /* --- 1. 统一的 App 布局样式 (已合并和清理) --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
+
+        html, body {
+            height: 100%;
+            overflow: hidden; /* 防止最外层页面滚动 */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: #f0f2f5;
-            padding: 20px;
         }
-        
+
+        .app-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .app-nav {
+            flex: 0 0 240px;
+            background: #ffffff;
+            padding: 20px;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .app-main {
+            flex: 1;
+            overflow-y: auto; /* 让主内容区可以独立滚动 */
+            padding: 30px;
+        }
+
+        .app-nav h1 {
+            font-size: 20px;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-list a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #374151;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .nav-list a:hover {
+            background-color: #f3f4f6;
+        }
+
+        .nav-list a.active {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* --- 2. 您原始的内容样式 (无改动，仅微调容器) --- */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -98,7 +86,7 @@
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             height: fit-content;
-            max-height: 90vh;
+            max-height: calc(100vh - 60px); /* 适配新布局的高度 */
             overflow-y: auto;
         }
         
@@ -120,228 +108,43 @@
         }
         
         /* 正面样式 */
-        .card-front {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        
-        .card-front .header {
-            background: #3b82f6;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            height: 90px;
-        }
-        
-        .logo-container {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-        
-        .logo-container img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-        
-        .header-text {
-            flex: 1;
-        }
-        
-        .university-name {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 2px;
-            line-height: 1.2;
-        }
-        
-        .card-subtitle {
-            font-size: 12px;
-            opacity: 0.95;
-            line-height: 1.3;
-            text-transform: uppercase;
-        }
-        
-        .card-body {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-            background: #fafafa;
-        }
-        
-        .photo-container {
-            width: 100px;
-            height: 130px;
-            background: #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #ddd;
-        }
-        
-        .photo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .photo-placeholder {
-            color: #999;
-            font-size: 11px;
-            text-align: center;
-        }
-        
-        .info-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 5px 0;
-        }
-        
-        .info-group {
-            margin-bottom: 8px;
-        }
-        
-        .info-label {
-            font-size: 10px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-        
-        .info-value {
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-            word-break: break-word;
-        }
-        
-        .card-footer {
-            padding: 12px 20px;
-            background: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #e0e0e0;
-            height: 60px;
-			margin-bottom: 20px;
-        }
-        
-        .date-group {
-            text-align: center;
-        }
-        
-        .date-label {
-            font-size: 9px;
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-        
-        .date-value {
-            font-size: 13px;
-            font-weight: 500;
-            color: #333;
-        }
+        .card-front { display: flex; flex-direction: column; height: 100%; }
+        .card-front .header { background: #3b82f6; color: white; padding: 15px 20px; display: flex; align-items: center; gap: 15px; height: 90px; }
+        .logo-container { width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+        .logo-container img { width: 50px; height: 50px; object-fit: contain; }
+        .header-text { flex: 1; }
+        .university-name { font-size: 22px; font-weight: bold; margin-bottom: 2px; line-height: 1.2; }
+        .card-subtitle { font-size: 12px; opacity: 0.95; line-height: 1.3; text-transform: uppercase; }
+        .card-body { flex: 1; padding: 20px; display: flex; gap: 20px; background: #fafafa; }
+        .photo-container { width: 100px; height: 130px; background: #e0e0e0; border-radius: 6px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 2px solid #ddd; }
+        .photo-container img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-placeholder { color: #999; font-size: 11px; text-align: center; }
+        .info-section { flex: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 5px 0; }
+        .info-group { margin-bottom: 8px; }
+        .info-label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .info-value { font-size: 16px; font-weight: 500; color: #333; word-break: break-word; }
+        .card-footer { padding: 12px 20px; background: white; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e0e0e0; height: 60px; }
+        .date-group { text-align: center; }
+        .date-label { font-size: 9px; color: #666; text-transform: uppercase; margin-bottom: 2px; }
+        .date-value { font-size: 13px; font-weight: 500; color: #333; }
         
         /* 背面样式 */
-        .card-back {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        
-        .card-back .black-bar {
-            height: 50px;
-            background: #000;
-            width: 100%;
-        }
-        
-        .card-back .content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .address-section {
-            margin-bottom: 15px;
-        }
-        
-        .section-title {
-            font-size: 10px;
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-        
-        .address-text {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.4;
-        }
-        
-        .notice-text {
-            font-size: 11px;
-            color: #666;
-            line-height: 1.5;
-            margin: 15px 0;
-            flex: 1;
-        }
-        
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: auto;
-        }
-        
-        .signature-area {
-            flex: 1;
-        }
-        
-        .signature-text {
-            font-size: 20px;
-            font-family: 'Brush Script MT', cursive;
-            color: #333;
-            margin-bottom: 3px;
-        }
-        
-        .signature-label {
-            font-size: 10px;
-            color: #999;
-        }
-        
-        .back-logo {
-            width: 60px;
-            height: 60px;
-        }
-        
-        .back-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .card-back { display: flex; flex-direction: column; height: 100%; }
+        .card-back .black-bar { height: 50px; background: #000; width: 100%; }
+        .card-back .content { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .address-section { margin-bottom: 15px; }
+        .section-title { font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .address-text { font-size: 14px; color: #333; line-height: 1.4; }
+        .notice-text { font-size: 11px; color: #666; line-height: 1.5; margin: 15px 0; flex: 1; }
+        .signature-section { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+        .signature-area { flex: 1; }
+        .signature-text { font-size: 20px; font-family: 'Brush Script MT', cursive; color: #333; margin-bottom: 3px; }
+        .signature-label { font-size: 10px; color: #999; }
+        .back-logo { width: 60px; height: 60px; }
+        .back-logo img { width: 100%; height: 100%; object-fit: contain; }
         
         /* 控制面板样式 */
-        h1 {
+        .control-panel h2 { /* 从 h1 改为 h2，避免和导航栏标题冲突 */
             margin-bottom: 20px;
             color: #333;
             font-size: 22px;
@@ -349,417 +152,143 @@
             align-items: center;
             gap: 8px;
         }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #555; font-size: 13px; font-weight: 500; }
+        input[type="text"], input[type="date"], textarea { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; transition: all 0.3s; }
+        input[type="text"]:focus, input[type="date"]:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        textarea { resize: vertical; min-height: 50px; font-family: inherit; }
+        input[type="file"] { width: 100%; padding: 6px; border: 2px dashed #ddd; border-radius: 6px; cursor: pointer; background: #fafafa; font-size: 12px; }
+        input[type="file"]:hover { border-color: #3b82f6; background: #f0f7ff; }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; position: sticky; bottom: 0; background: white; padding-top: 10px; }
+        button { flex: 1; padding: 10px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .btn-secondary { background: #6b7280; color: white; }
+        .btn-secondary:hover { background: #4b5563; transform: translateY(-1px); }
+        .preview-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 10px; padding: 8px 15px; background: white; border-radius: 8px; text-align: center; width: 500px; }
+        .form-separator { height: 1px; background: #e5e7eb; margin: 20px -25px; }
+        .form-section-title { font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 15px; margin-top: 20px; }
         
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        
-        input[type="text"],
-        input[type="date"],
-        textarea {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        
-        input[type="text"]:focus,
-        input[type="date"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        textarea {
-            resize: vertical;
-            min-height: 50px;
-            font-family: inherit;
-        }
-        
-        input[type="file"] {
-            width: 100%;
-            padding: 6px;
-            border: 2px dashed #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #fafafa;
-            font-size: 12px;
-        }
-        
-        input[type="file"]:hover {
-            border-color: #3b82f6;
-            background: #f0f7ff;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            position: sticky;
-            bottom: 0;
-            background: white;
-            padding-top: 10px;
-        }
-        
-        button {
-            flex: 1;
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .btn-secondary {
-            background: #6b7280;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #4b5563;
-            transform: translateY(-1px);
-        }
-        
-        .preview-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-            padding: 8px 15px;
-            background: white;
-            border-radius: 8px;
-            text-align: center;
-            width: 500px;
-        }
-        
-        /* 分隔线 */
-        .form-separator {
-            height: 1px;
-            background: #e5e7eb;
-            margin: 20px -25px;
-        }
-        
-        .form-section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 15px;
-            margin-top: 20px;
-        }
-        
+        /* 打印样式 */
         @media print {
-            @page {
-                size: 85.6mm 54mm;
-                margin: 0;
-            }
-            
-            body {
-                background: white;
-                padding: 0;
-            }
-            
-            .container {
-                display: block;
-            }
-            
-            .control-panel {
-                display: none;
-            }
-            
-            .preview-title {
-                display: none;
-            }
-            
-            .student-card {
-                width: 85.6mm;
-                height: 54mm;
-                box-shadow: none;
-                border-radius: 8px;
-                page-break-after: always;
-                margin: 0;
-            }
-            
-            .card-front .header {
-                height: 16mm;
-            }
-            
-            .card-back .black-bar {
-                height: 10mm;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .control-panel {
-                flex: 1 1 auto;
-                max-height: none;
-            }
-            
-            .student-card {
-                width: 100%;
-                max-width: 500px;
-                margin: 0 auto;
-            }
-            
-            .preview-title {
-                width: 100%;
-                max-width: 500px;
-            }
+            @page { size: 85.6mm 54mm; margin: 0; }
+            body { background: white; padding: 0; overflow: visible; }
+            .app-layout, .app-main { display: block; height: auto; padding: 0; }
+            .app-nav, .control-panel, .preview-title { display: none; }
+            .container { display: block; }
+            .student-card { width: 85.6mm; height: 54mm; box-shadow: none; border-radius: 8px; page-break-after: always; margin: 0; }
+            .card-front .header { height: 16mm; }
+            .card-back .black-bar { height: 10mm; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="control-panel">
-            <h1>🎓 学生证生成系统</h1>
-            
-            <div class="form-section-title">Basic Information</div>
-            
-            <div class="form-group">
-                <label for="universityName">University Name</label>
-                <input type="text" id="universityName" value="California State University-Northridge (Northridge, CA)">
-            </div>
-            
-            <div class="form-group">
-                <label for="cardSubtitle">Subtitle / Student Status</label>
-                <input type="text" id="cardSubtitle" value="GRAD STUDENT">
-            </div>
-            
-            <div class="form-group">
-                <label for="logo">University Logo</label>
-                <input type="file" id="logo" accept="image/*">
-            </div>
-            
-            <div class="form-group">
-                <label for="photo">Student Photo</label>
-                <input type="file" id="photo" accept="image/*">
-            </div>
-            
-            <div class="form-separator"></div>
-            <div class="form-section-title">Student Details</div>
-            
-            <div class="form-group">
-                <label for="nameLabel">Name Label</label>
-                <input type="text" id="nameLabel" value="NAME">
-            </div>
-            
-            <div class="form-group">
-                <label for="studentName">Student Name</label>
-                <input type="text" id="studentName" value="Ushek Salan">
-            </div>
-            
-            <div class="form-group">
-                <label for="idLabel">ID Label</label>
-                <input type="text" id="idLabel" value="STUDENT NUMBER">
-            </div>
-            
-            <div class="form-group">
-                <label for="studentId">Student ID</label>
-                <input type="text" id="studentId" value="20700431364984">
-            </div>
-            
-            <div class="form-group">
-                <label for="facultyLabel">Department Label</label>
-                <input type="text" id="facultyLabel" value="DEPARTMENTS">
-            </div>
-            
-            <div class="form-group">
-                <label for="faculty">Department</label>
-                <input type="text" id="faculty" value="School of Physics">
-            </div>
-            
-            <div class="form-separator"></div>
-            <div class="form-section-title">Date Information</div>
-            
-            <div class="form-group">
-                <label for="issueDateLabel">Issue Date Label</label>
-                <input type="text" id="issueDateLabel" value="DATE OF ISSUE">
-            </div>
-            
-            <div class="form-group">
-                <label for="issueDate">Issue Date</label>
-                <input type="date" id="issueDate" value="2024-11-08">
-            </div>
-            
-            <div class="form-group">
-                <label for="validDateLabel">Expiry Date Label</label>
-                <input type="text" id="validDateLabel" value="VALID UNTIL">
-            </div>
-            
-            <div class="form-group">
-                <label for="validDate">Expiry Date</label>
-                <input type="date" id="validDate" value="2028-12-12">
-            </div>
-            
-            <div class="form-separator"></div>
-            <div class="form-section-title">Back Side Information</div>
-            
-            <div class="form-group">
-                <label for="addressTitle">Address Title</label>
-                <input type="text" id="addressTitle" value="OWNER'S ADDRESS">
-            </div>
-            
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" value="18111 Nordhoff St, Northridge, CA 91330">
-            </div>
-            
-            <div class="form-group">
-                <label for="notice">Notice</label>
-                <textarea id="notice">This card is the property of the university and must be returned upon request. If found, please return to the nearest university office.</textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="signatureText">Signature Text</label>
-                <input type="text" id="signatureText" value="Ushek Salan">
-            </div>
-            
-            <div class="form-group">
-                <label for="signatureLabel">Signature Label</label>
-                <input type="text" id="signatureLabel" value="Cardholder's Signature">
-            </div>
-            
-            <div class="button-group">
-                <button class="btn-primary" onclick="updateCard()">Update Preview</button>
-                <button class="btn-secondary" onclick="window.print()">Print ID Card</button>
-            </div>
-        </div>
-        
-        <div class="preview-area">
-            <div class="preview-title">学生证预览 - 正面</div>
-            <div class="student-card card-front">
-                <div class="header">
-                    <div class="logo-container">
-                        <img id="logoImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/CSUN_Seals.svg/2048px-CSUN_Seals.svg.png" alt="Logo">
-                    </div>
-                    <div class="header-text">
-                        <div class="university-name" id="universityNameDisplay">California State University-Northridge (Northridge, CA)</div>
-                        <div class="card-subtitle" id="cardSubtitleDisplay">GRAD STUDENT</div>
-                    </div>
+    <!-- 这是新的 App 布局框架 -->
+    <div class="app-layout">
+        <!-- 这是新的左侧导航栏 -->
+        <nav class="app-nav">
+            <h1>🎓 Generators</h1>
+            <ul class="nav-list">
+                <li><a href="index.html" class="active">ID Card Generator</a></li>
+                <li><a href="documents.html">Document Generator</a></li>
+            </ul>
+        </nav>
+
+        <!-- 这是新的主内容区域 -->
+        <main class="app-main">
+            <!-- 您原始的所有内容都放在这里 -->
+            <div class="container">
+                <div class="control-panel">
+                    <h2>🎓 学生证生成系统</h2> <!-- 标题从 h1 改为 h2 -->
+                    
+                    <div class="form-section-title">Basic Information</div>
+                    
+                    <div class="form-group"><label for="universityName">University Name</label><input type="text" id="universityName" value="California State University-Northridge (Northridge, CA)"></div>
+                    <div class="form-group"><label for="cardSubtitle">Subtitle / Student Status</label><input type="text" id="cardSubtitle" value="GRAD STUDENT"></div>
+                    <div class="form-group"><label for="logo">University Logo</label><input type="file" id="logo" accept="image/*"></div>
+                    <div class="form-group"><label for="photo">Student Photo</label><input type="file" id="photo" accept="image/*"></div>
+                    <div class="form-separator"></div>
+                    <div class="form-section-title">Student Details</div>
+                    <div class="form-group"><label for="nameLabel">Name Label</label><input type="text" id="nameLabel" value="NAME"></div>
+                    <div class="form-group"><label for="studentName">Student Name</label><input type="text" id="studentName" value="Ushek Salan"></div>
+                    <div class="form-group"><label for="idLabel">ID Label</label><input type="text" id="idLabel" value="STUDENT NUMBER"></div>
+                    <div class="form-group"><label for="studentId">Student ID</label><input type="text" id="studentId" value="20700431364984"></div>
+                    <div class="form-group"><label for="facultyLabel">Department Label</label><input type="text" id="facultyLabel" value="DEPARTMENTS"></div>
+                    <div class="form-group"><label for="faculty">Department</label><input type="text" id="faculty" value="School of Physics"></div>
+                    <div class="form-separator"></div>
+                    <div class="form-section-title">Date Information</div>
+                    <div class="form-group"><label for="issueDateLabel">Issue Date Label</label><input type="text" id="issueDateLabel" value="DATE OF ISSUE"></div>
+                    <div class="form-group"><label for="issueDate">Issue Date</label><input type="date" id="issueDate" value="2024-11-08"></div>
+                    <div class="form-group"><label for="validDateLabel">Expiry Date Label</label><input type="text" id="validDateLabel" value="VALID UNTIL"></div>
+                    <div class="form-group"><label for="validDate">Expiry Date</label><input type="date" id="validDate" value="2028-12-12"></div>
+                    <div class="form-separator"></div>
+                    <div class="form-section-title">Back Side Information</div>
+                    <div class="form-group"><label for="addressTitle">Address Title</label><input type="text" id="addressTitle" value="OWNER'S ADDRESS"></div>
+                    <div class="form-group"><label for="address">Address</label><input type="text" id="address" value="18111 Nordhoff St, Northridge, CA 91330"></div>
+                    <div class="form-group"><label for="notice">Notice</label><textarea id="notice">This card is the property of the university and must be returned upon request. If found, please return to the nearest university office.</textarea></div>
+                    <div class="form-group"><label for="signatureText">Signature Text</label><input type="text" id="signatureText" value="Ushek Salan"></div>
+                    <div class="form-group"><label for="signatureLabel">Signature Label</label><input type="text" id="signatureLabel" value="Cardholder's Signature"></div>
+                    <div class="button-group"><button class="btn-primary" onclick="updateCard()">Update Preview</button><button class="btn-secondary" onclick="window.print()">Print ID Card</button></div>
                 </div>
                 
-                <div class="card-body">
-                    <div class="photo-container">
-                        <img id="photoImg" style="display:none;" alt="Student Photo">
-                        <div class="photo-placeholder" id="photoPlaceholder">
-                            Student Photo<br>3x4
+                <div class="preview-area">
+                    <div class="preview-title">学生证预览 - 正面</div>
+                    <div class="student-card card-front">
+                        <div class="header">
+                            <div class="logo-container"><img id="logoImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/CSUN_Seals.svg/2048px-CSUN_Seals.svg.png" alt="Logo"></div>
+                            <div class="header-text"><div class="university-name" id="universityNameDisplay"></div><div class="card-subtitle" id="cardSubtitleDisplay"></div></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="photo-container"><img id="photoImg" style="display:none;" alt="Student Photo"><div class="photo-placeholder" id="photoPlaceholder">Student Photo<br>3x4</div></div>
+                            <div class="info-section">
+                                <div class="info-group"><div class="info-label" id="nameLabelDisplay"></div><div class="info-value" id="studentNameDisplay"></div></div>
+                                <div class="info-group"><div class="info-label" id="idLabelDisplay"></div><div class="info-value" id="studentIdDisplay"></div></div>
+                                <div class="info-group"><div class="info-label" id="facultyLabelDisplay"></div><div class="info-value" id="facultyDisplay"></div></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="date-group"><div class="date-label" id="issueDateLabelDisplay"></div><div class="date-value" id="issueDateDisplay"></div></div>
+                            <div class="date-group"><div class="date-label" id="validDateLabelDisplay"></div><div class="date-value" id="validDateDisplay"></div></div>
                         </div>
                     </div>
                     
-                    <div class="info-section">
-                        <div class="info-group">
-                            <div class="info-label" id="nameLabelDisplay">NAME</div>
-                            <div class="info-value" id="studentNameDisplay">Ushek Salan</div>
-                        </div>
-                        
-                        <div class="info-group">
-                            <div class="info-label" id="idLabelDisplay">STUDENT NUMBER</div>
-                            <div class="info-value" id="studentIdDisplay">20700431364984</div>
-                        </div>
-                        
-                        <div class="info-group">
-                            <div class="info-label" id="facultyLabelDisplay">DEPARTMENTS</div>
-                            <div class="info-value" id="facultyDisplay">School of Physics</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card-footer">
-                    <div class="date-group">
-                        <div class="date-label" id="issueDateLabelDisplay">DATE OF ISSUE</div>
-                        <div class="date-value" id="issueDateDisplay">2024-11-08</div>
-                    </div>
-                    <div class="date-group">
-                        <div class="date-label" id="validDateLabelDisplay">VALID UNTIL</div>
-                        <div class="date-value" id="validDateDisplay">2028-12-12</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="preview-title">学生证预览 - 背面</div>
-            <div class="student-card card-back">
-                <div class="black-bar"></div>
-                
-                <div class="content">
-                    <div class="address-section">
-                        <div class="section-title" id="addressTitleDisplay">OWNER'S ADDRESS</div>
-                        <div class="address-text" id="addressDisplay">18111 Nordhoff St, Northridge, CA 91330</div>
-                    </div>
-                    
-                    <div class="notice-text" id="noticeDisplay">
-                        This card is the property of the university and must be returned upon request. If found, please return to the nearest university office.
-                    </div>
-                    
-                    <div class="signature-section">
-                        <div class="signature-area">
-                            <div class="signature-text" id="signatureTextDisplay">Ushek Salan</div>
-                            <div class="signature-label" id="signatureLabelDisplay">Cardholder's Signature</div>
-                        </div>
-                        <div class="back-logo">
-                            <img id="backLogoImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/CSUN_Seals.svg/2048px-CSUN_Seals.svg.png" alt="Logo">
+                    <div class="preview-title">学生证预览 - 背面</div>
+                    <div class="student-card card-back">
+                        <div class="black-bar"></div>
+                        <div class="content">
+                            <div class="address-section"><div class="section-title" id="addressTitleDisplay"></div><div class="address-text" id="addressDisplay"></div></div>
+                            <div class="notice-text" id="noticeDisplay"></div>
+                            <div class="signature-section">
+                                <div class="signature-area"><div class="signature-text" id="signatureTextDisplay"></div><div class="signature-label" id="signatureLabelDisplay"></div></div>
+                                <div class="back-logo"><img id="backLogoImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/CSUN_Seals.svg/2048px-CSUN_Seals.svg.png" alt="Logo"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
     
     <script>
-        // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', function() {
             updateCard();
-            
-            // 为所有输入框添加实时更新
             const inputs = document.querySelectorAll('input[type="text"], input[type="date"], textarea');
-            inputs.forEach(input => {
-                input.addEventListener('input', updateCard);
-            });
+            inputs.forEach(input => input.addEventListener('input', updateCard));
         });
         
-        // 处理校徽上传
         document.getElementById('logo').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
+            if (e.target.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('logoImg').src = e.target.result;
                     document.getElementById('backLogoImg').src = e.target.result;
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(e.target.files[0]);
             }
         });
         
-        // 处理照片上传
         document.getElementById('photo').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
+            if (e.target.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const img = document.getElementById('photoImg');
@@ -767,62 +296,25 @@
                     img.style.display = 'block';
                     document.getElementById('photoPlaceholder').style.display = 'none';
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(e.target.files[0]);
             }
         });
         
-        // 更新学生证显示
         function updateCard() {
-            // 更新正面信息
-            document.getElementById('universityNameDisplay').textContent = 
-                document.getElementById('universityName').value || 'University Name';
-            document.getElementById('cardSubtitleDisplay').textContent = 
-                document.getElementById('cardSubtitle').value || 'Student ID';
-            
-            document.getElementById('nameLabelDisplay').textContent = 
-                document.getElementById('nameLabel').value;
-            document.getElementById('studentNameDisplay').textContent = 
-                document.getElementById('studentName').value || 'Student Name';
-            
-            document.getElementById('idLabelDisplay').textContent = 
-                document.getElementById('idLabel').value;
-            document.getElementById('studentIdDisplay').textContent = 
-                document.getElementById('studentId').value || 'Student ID';
-            
-            document.getElementById('facultyLabelDisplay').textContent = 
-                document.getElementById('facultyLabel').value;
-            document.getElementById('facultyDisplay').textContent = 
-                document.getElementById('faculty').value || 'Department';
-            
-            document.getElementById('issueDateLabelDisplay').textContent = 
-                document.getElementById('issueDateLabel').value;
-            document.getElementById('issueDateDisplay').textContent = 
-                formatDate(document.getElementById('issueDate').value);
-            
-            document.getElementById('validDateLabelDisplay').textContent = 
-                document.getElementById('validDateLabel').value;
-            document.getElementById('validDateDisplay').textContent = 
-                formatDate(document.getElementById('validDate').value);
-            
-            // 更新背面信息
-            document.getElementById('addressTitleDisplay').textContent = 
-                document.getElementById('addressTitle').value;
-            document.getElementById('addressDisplay').textContent = 
-                document.getElementById('address').value || 'Address';
-            
-            document.getElementById('noticeDisplay').textContent = 
-                document.getElementById('notice').value;
-            
-            document.getElementById('signatureTextDisplay').textContent = 
-                document.getElementById('signatureText').value || 'Signature';
-            document.getElementById('signatureLabelDisplay').textContent = 
-                document.getElementById('signatureLabel').value;
+            const fields = [
+                'universityName', 'cardSubtitle', 'nameLabel', 'studentName', 'idLabel', 'studentId',
+                'facultyLabel', 'faculty', 'issueDateLabel', 'validDateLabel', 'addressTitle',
+                'address', 'notice', 'signatureText', 'signatureLabel'
+            ];
+            fields.forEach(id => {
+                document.getElementById(id + 'Display').textContent = document.getElementById(id).value;
+            });
+            document.getElementById('issueDateDisplay').textContent = formatDate(document.getElementById('issueDate').value);
+            document.getElementById('validDateDisplay').textContent = formatDate(document.getElementById('validDate').value);
         }
         
-        // 格式化日期
         function formatDate(dateString) {
-            if (!dateString) return '____-__-__';
-            return dateString;
+            return dateString || '____-__-__';
         }
     </script>
 </body>
