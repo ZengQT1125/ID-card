@@ -5,375 +5,199 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Generation System</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* --- 1. NEW APP LAYOUT --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent body scroll */
         }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Times New Roman', Arial, sans-serif;
             background: #f0f2f5;
-            padding: 20px;
-            line-height: 1.6;
+            color: #333;
         }
-        
+        .app-layout { display: flex; height: 100vh; }
+        .app-nav {
+            flex: 0 0 240px;
+            background: #ffffff;
+            padding: 20px;
+            border-right: 1px solid #e5e7eb;
+        }
+        .app-nav h1 {
+            font-size: 20px;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-list { list-style: none; }
+        .nav-list a { display: block; padding: 12px 15px; text-decoration: none; color: #374151; border-radius: 8px; font-weight: 500; margin-bottom: 5px; }
+        .nav-list a:hover { background-color: #f3f4f6; }
+        .nav-list a.active { background-color: #2c5aa0; color: white; font-weight: 600; }
+        .app-main { flex: 1; overflow-y: auto; padding: 30px; }
+
+        /* --- 2. ORIGINAL CONTENT STYLES (RESTORED) --- */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             gap: 30px;
-            flex-wrap: wrap;
             align-items: flex-start;
         }
-        
-        .control-panel {
-            flex: 0 0 380px;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            height: fit-content;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .preview-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-        }
-        
-        .certificate {
-            width: 210mm;
-            min-height: 297mm;
-            background: white;
-            padding: 30mm 25mm;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: relative;
-            display: none;
-        }
-        
-        .certificate.active {
-            display: block;
-        }
-        
-        .certificate-border {
-            position: absolute;
-            top: 15mm; left: 15mm; right: 15mm; bottom: 15mm;
-            border: 3px double #2c5aa0;
-            pointer-events: none;
-        }
-        
-        .admission-letter, .enrollment-certificate {
-            font-family: 'Times New Roman', serif;
-        }
-        
-        .letter-header, .certificate-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .university-logo {
-            width: 70px; height: 70px;
-            margin: 0 auto 15px;
-            border: 3px solid #2c5aa0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold; font-size: 20px;
-        }
-        
-        .university-name {
-            font-size: 22px; font-weight: bold; color: #1a365d;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        
-        .university-name-en {
-            font-size: 16px; color: #495057;
-        }
-        
-        .document-title {
-            font-size: 26px; font-weight: bold; color: #2c5aa0;
-            margin: 30px 0; text-align: center; text-transform: uppercase;
-        }
-        
-        .letter-body, .certificate-body {
-            margin: 20px 0; font-size: 15px; color: #333; line-height: 1.8;
-        }
-        
-        .letter-body p, .certificate-body p {
-            margin-bottom: 18px;
-        }
+        .control-panel { flex: 0 0 380px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); height: fit-content; }
+        .preview-area { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .certificate { width: 210mm; min-height: 297mm; background: white; padding: 30mm 25mm; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; display: none; }
+        .certificate.active { display: block; }
 
-        .highlight {
-            font-weight: bold;
-            color: #212529;
-            background: #e9ecef;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        
-        .signature-section {
-            margin-top: 60px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
+        /* Original Certificate Styles */
+        .certificate-border { position: absolute; top: 15mm; left: 15mm; right: 15mm; bottom: 15mm; border: 3px double #2c5aa0; pointer-events: none; }
+        .letter-header, .certificate-header { text-align: center; margin-bottom: 30px; }
+        .university-logo { width: 70px; height: 70px; margin: 0 auto 15px; border: 3px solid #2c5aa0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }
+        .university-name { font-size: 22px; font-weight: bold; color: #1a365d; }
+        .document-title { font-size: 26px; font-weight: bold; color: #2c5aa0; margin: 30px 0; text-align: center; text-transform: uppercase; }
+        .letter-body, .certificate-body { margin: 20px 0; font-size: 15px; color: #333; line-height: 1.8; }
+        .letter-body p, .certificate-body p { margin-bottom: 18px; }
+        .highlight { font-weight: bold; color: #212529; background: #e9ecef; padding: 2px 6px; border-radius: 4px; }
+        .signature-section { margin-top: 60px; display: flex; justify-content: flex-end; }
         .signature-block { text-align: center; width: 250px; }
-        .signature-line {
-            border-bottom: 1px solid #333;
-            margin-bottom: 8px; height: 40px;
-        }
+        .signature-line { border-bottom: 1px solid #333; margin-bottom: 8px; height: 40px; }
         .signature-title { font-size: 14px; color: #666; }
-        
-        h1 { margin-bottom: 20px; font-size: 22px; }
-        
-        .document-selector {
-            display: flex; gap: 10px; margin-bottom: 25px;
-        }
-        
-        .doc-type-btn {
-            flex: 1; padding: 12px; border: 2px solid #e9ecef;
-            background: white; border-radius: 8px; cursor: pointer;
-            font-size: 14px; font-weight: 500;
-        }
-        
-        .doc-type-btn.active {
-            background: #2c5aa0; color: white; border-color: #2c5aa0;
-        }
-        
+
+        /* Form Styles */
+        .control-panel h2 { font-size: 22px; margin-bottom: 20px; }
+        .document-selector { display: flex; gap: 10px; margin-bottom: 25px; }
+        .doc-type-btn { flex: 1; padding: 12px; border: 2px solid #e9ecef; background: white; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .doc-type-btn.active { background: #2c5aa0; color: white; border-color: #2c5aa0; }
         .form-section { display: none; }
         .form-section.active { display: block; }
-        
         .form-group { margin-bottom: 15px; }
-        
-        label {
-            display: block; margin-bottom: 5px; color: #495057;
-            font-size: 14px; font-weight: 500;
-        }
-        
-        input[type="text"], input[type="date"], select {
-            width: 100%; padding: 10px 12px; border: 1px solid #ced4da;
-            border-radius: 6px; font-size: 14px; font-family: inherit;
-        }
-        
-        .form-section-title {
-            font-size: 16px; font-weight: 600; color: #212529;
-            margin: 25px 0 15px 0;
-        }
-        
+        label { display: block; margin-bottom: 5px; color: #495057; font-size: 14px; font-weight: 500; }
+        input[type="text"], input[type="date"], select { width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; font-family: inherit; }
+        .form-section-title { font-size: 16px; font-weight: 600; color: #212529; margin: 25px 0 15px 0; }
         .button-group { display: flex; gap: 10px; margin-top: 25px; }
-        
-        button {
-            flex: 1; padding: 12px 20px; border: none; border-radius: 6px;
-            font-size: 14px; font-weight: 500; cursor: pointer;
-        }
-        
+        button { flex: 1; padding: 12px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
         .btn-primary { background: #2c5aa0; color: white; }
         .btn-success { background: #28a745; color: white; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="control-panel">
-            <h1>🎓 Document Generator</h1>
-            
-            <div class="document-selector">
-                <button class="doc-type-btn active" onclick="selectDocument('admission')">Admission Letter</button>
-                <button class="doc-type-btn" onclick="selectDocument('enrollment')">Enrollment Certificate</button>
-            </div>
-            
-            <div class="form-section-title">University Information</div>
-            
-            <div class="form-group">
-                <label for="universityName">University Name</label>
-                <input type="text" id="universityName" value="Pamir University">
-            </div>
-            <div class="form-group">
-                <label for="deanName">Dean's Name</label>
-                <input type="text" id="deanName" value="Dr. Peter Petrov">
-            </div>
-            <div class="form-group">
-                <label for="issueDate">Issue Date</label>
-                <input type="date" id="issueDate" value="2024-07-15">
-            </div>
+    <div class="app-layout">
+        <nav class="app-nav">
+            <h1>🎓 Generators</h1>
+            <ul class="nav-list">
+                <li><a href="index.html">ID Card Generator</a></li>
+                <li><a href="documents.html" class="active">Document Generator</a></li>
+            </ul>
+        </nav>
 
-            <!-- Admission Letter Form -->
-            <div id="admissionForm" class="form-section active">
-                <div class="form-section-title">Admission Letter Details</div>
-                <div class="form-group">
-                    <label for="studentName">Student Name</label>
-                    <input type="text" id="studentName" value="John A. Doe">
+        <main class="app-main">
+            <div class="container">
+                <div class="control-panel">
+                    <h2>Document Controls</h2>
+                    <div class="document-selector">
+                        <button class="doc-type-btn active" onclick="selectDocument('admission')">Admission Letter</button>
+                        <button class="doc-type-btn" onclick="selectDocument('enrollment')">Enrollment Certificate</button>
+                    </div>
+                    <div class="form-section-title">Common Information</div>
+                    <div class="form-group"><label for="universityName">University Name</label><input type="text" id="universityName" value="Pamir University"></div>
+                    <div class="form-group"><label for="deanName">Dean's Name</label><input type="text" id="deanName" value="Dr. Peter Petrov"></div>
+                    <div class="form-group"><label for="issueDate">Issue Date</label><input type="date" id="issueDate"></div>
+                    
+                    <div id="admissionForm" class="form-section active">
+                        <div class="form-section-title">Admission Letter Details</div>
+                        <div class="form-group"><label for="studentName">Student Name</label><input type="text" id="studentName" value="John A. Doe"></div>
+                        <div class="form-group"><label for="faculty">Faculty / School</label><input type="text" id="faculty" value="School of Information Technology"></div>
+                        <div class="form-group"><label for="specialty">Major / Specialty</label><input type="text" id="specialty" value="Computer Science"></div>
+                        <div class="form-group"><label for="educationLevel">Education Level</label><select id="educationLevel"><option value="undergraduate program">Bachelor</option><option value="master program">Master</option></select></div>
+                    </div>
+                    
+                    <div id="enrollmentForm" class="form-section">
+                        <div class="form-section-title">Enrollment Certificate Details</div>
+                        <div class="form-group"><label for="enrollStudentName">Student Name</label><input type="text" id="enrollStudentName" value="Jane S. Smith"></div>
+                        <div class="form-group"><label for="enrollPassport">Passport Number</label><input type="text" id="enrollPassport" value="A1234567"></div>
+                        <div class="form-group"><label for="enrollDate">Enrolled Since (Date)</label><input type="date" id="enrollDate"></div>
+                    </div>
+                    
+                    <div class="button-group"><button class="btn-primary" onclick="generateDocument()">Update Preview</button><button class="btn-success" onclick="window.print()">Print</button></div>
                 </div>
-                <div class="form-group">
-                    <label for="faculty">Faculty / School</label>
-                    <input type="text" id="faculty" value="School of Information Technology">
-                </div>
-                <div class="form-group">
-                    <label for="specialty">Major / Specialty</label>
-                    <input type="text" id="specialty" value="Computer Science">
-                </div>
-                 <div class="form-group">
-                    <label for="educationLevel">Education Level</label>
-                    <select id="educationLevel">
-                        <option value="undergraduate program">Bachelor</option>
-                        <option value="master program">Master</option>
-                        <option value="doctoral program">Doctorate</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- Enrollment Certificate Form -->
-            <div id="enrollmentForm" class="form-section">
-                <div class="form-section-title">Enrollment Certificate Details</div>
-                <div class="form-group">
-                    <label for="enrollStudentName">Student Name</label>
-                    <input type="text" id="enrollStudentName" value="Jane S. Smith">
-                </div>
-                <div class="form-group">
-                    <label for="enrollPassport">Passport Number</label>
-                    <input type="text" id="enrollPassport" value="A1234567">
-                </div>
-                <div class="form-group">
-                    <label for="enrollDate">Enrolled Since (Date)</label>
-                    <input type="date" id="enrollDate" value="2023-09-01">
-                </div>
-            </div>
-            
-            <div class="button-group">
-                <button class="btn-primary" onclick="generateDocument()">Update Preview</button>
-                <button class="btn-success" onclick="window.print()">Print</button>
-            </div>
-        </div>
-        
-        <div class="preview-area">
-            <!-- START: 新的标签页导航 -->
-            <div style="width: 210mm; text-align: center; margin-bottom: 20px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <a href="index.html" style="text-decoration: none; color: #333; margin: 0 15px; font-size: 16px; padding: 8px 12px;">学生证生成器 (ID Card)</a>
-                <a href="documents.html" style="text-decoration: none; font-weight: bold; color: #2c5aa0; margin: 0 15px; font-size: 16px; padding: 8px 12px; border-bottom: 3px solid #2c5aa0;">证明与通知书 (Documents)</a>
-            </div>
-            <!-- END: 新的标签页导航 -->
-
-            <!-- Admission Letter Preview -->
-            <div id="admissionPreview" class="certificate admission-letter active">
-                <div class="certificate-border"></div>
-                <div class="letter-header">
-                    <div class="university-logo">PU</div>
-                    <div class="university-name" id="previewUniversityName"></div>
-                </div>
-                <div class="document-title">Letter of Admission</div>
-                <div class="letter-body">
-                    <p id="previewIssueDate" style="text-align: right;"></p>
-                    <p>Dear <span id="previewStudentName" class="highlight"></span>,</p>
-                    <p>
-                        On behalf of the admissions committee, I am delighted to offer you admission to the 
-                        <span id="previewUniversityName2" class="highlight"></span> for the 
-                        <span id="previewEducationLevel" class="highlight"></span> in 
-                        "<span id="previewSpecialty" class="highlight"></span>" at the 
-                        <span id="previewFaculty" class="highlight"></span>.
-                    </p>
-                    <p>
-                        We were deeply impressed with your application and believe you will make a significant contribution to our university community.
-                    </p>
-                    <p>Congratulations on your admission. We look forward to welcoming you to campus.</p>
-                </div>
-                <div class="signature-section">
-                    <div class="signature-block">
-                        <div class="signature-line"></div>
-                        <div id="previewDeanName" style="font-weight: bold;"></div>
-                        <div class="signature-title">Dean of the Faculty</div>
+                
+                <div class="preview-area">
+                    <div id="admissionPreview" class="certificate admission-letter active">
+                        <div class="certificate-border"></div>
+                        <div class="letter-header"><div class="university-logo">PU</div><div class="university-name" id="previewUniversityName"></div></div>
+                        <div class="document-title">Letter of Admission</div>
+                        <div class="letter-body">
+                            <p id="previewIssueDate" style="text-align: right;"></p>
+                            <p>Dear <span id="previewStudentName" class="highlight"></span>,</p>
+                            <p>On behalf of the admissions committee, I am delighted to offer you admission to the <span id="previewUniversityName2" class="highlight"></span> for the <span id="previewEducationLevel" class="highlight"></span> in "<span id="previewSpecialty" class="highlight"></span>" at the <span id="previewFaculty" class="highlight"></span>.</p>
+                            <p>Congratulations, and we look forward to welcoming you.</p>
+                        </div>
+                        <div class="signature-section"><div class="signature-block"><div class="signature-line"></div><div id="previewDeanName" style="font-weight: bold;"></div><div class="signature-title">Dean of the Faculty</div></div></div>
+                    </div>
+                    
+                    <div id="enrollmentPreview" class="certificate enrollment-certificate">
+                        <div class="certificate-border"></div>
+                        <div class="certificate-header"><div class="university-logo">PU</div><div class="university-name" id="previewEnrollUniversityName"></div></div>
+                        <div class="document-title">Certificate of Enrollment</div>
+                        <div class="certificate-body">
+                            <p id="previewEnrollIssueDate" style="text-align: right;"></p>
+                            <p>This is to certify that <span id="previewEnrollStudentName" class="highlight"></span> (Passport No. <span id="previewEnrollPassport" class="highlight"></span>) is a full-time registered student at <span id="previewEnrollUniversityName2" class="highlight"></span>.</p>
+                            <p>The student has been enrolled since <span id="previewEnrollDate" class="highlight"></span>.</p>
+                        </div>
+                        <div class="signature-section"><div class="signature-block"><div class="signature-line"></div><div id="previewEnrollDeanName" style="font-weight: bold;"></div><div class="signature-title">Dean of the Faculty</div></div></div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Enrollment Certificate Preview -->
-            <div id="enrollmentPreview" class="certificate enrollment-certificate">
-                <div class="certificate-border"></div>
-                <div class="certificate-header">
-                    <div class="university-logo">PU</div>
-                    <div class="university-name" id="previewEnrollUniversityName"></div>
-                </div>
-                <div class="document-title">Certificate of Enrollment</div>
-                <div class="certificate-body">
-                    <p id="previewEnrollIssueDate" style="text-align: right;"></p>
-                    <p>
-                        This is to certify that <span id="previewEnrollStudentName" class="highlight"></span>
-                        (Passport No. <span id="previewEnrollPassport" class="highlight"></span>)
-                        is a full-time registered student at <span id="previewEnrollUniversityName2" class="highlight"></span>.
-                    </p>
-                    <p>
-                        The student has been enrolled since <span id="previewEnrollDate" class="highlight"></span>.
-                    </p>
-                    <p>This certificate is issued upon request for whatever legal purpose it may serve.</p>
-                </div>
-                <div class="signature-section">
-                     <div class="signature-block">
-                        <div class="signature-line"></div>
-                        <div id="previewEnrollDeanName" style="font-weight: bold;"></div>
-                        <div class="signature-title">Dean of the Faculty</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>
         function selectDocument(type) {
             document.querySelectorAll('.doc-type-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            document.querySelectorAll('.form-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.form-section, .certificate').forEach(el => el.classList.remove('active'));
             document.getElementById(type + 'Form').classList.add('active');
-            
-            document.querySelectorAll('.certificate').forEach(cert => cert.classList.remove('active'));
             document.getElementById(type + 'Preview').classList.add('active');
         }
         
         function generateDocument() {
-            // Common Info
             const uniName = document.getElementById('universityName').value;
             const deanName = document.getElementById('deanName').value;
-            const issueDate = formatDate(document.getElementById('issueDate').value);
+            const issueDate = `Date: ${formatDate(document.getElementById('issueDate').value)}`;
 
-            // Update Admission Letter
+            // Admission
             document.getElementById('previewUniversityName').textContent = uniName;
             document.getElementById('previewUniversityName2').textContent = uniName;
-            document.getElementById('previewIssueDate').textContent = `Date: ${issueDate}`;
+            document.getElementById('previewIssueDate').textContent = issueDate;
             document.getElementById('previewStudentName').textContent = document.getElementById('studentName').value;
             document.getElementById('previewEducationLevel').textContent = document.getElementById('educationLevel').value;
             document.getElementById('previewSpecialty').textContent = document.getElementById('specialty').value;
             document.getElementById('previewFaculty').textContent = document.getElementById('faculty').value;
             document.getElementById('previewDeanName').textContent = deanName;
-
-            // Update Enrollment Certificate
+            
+            // Enrollment
             document.getElementById('previewEnrollUniversityName').textContent = uniName;
             document.getElementById('previewEnrollUniversityName2').textContent = uniName;
-            document.getElementById('previewEnrollIssueDate').textContent = `Date: ${issueDate}`;
+            document.getElementById('previewEnrollIssueDate').textContent = issueDate;
             document.getElementById('previewEnrollStudentName').textContent = document.getElementById('enrollStudentName').value;
             document.getElementById('previewEnrollPassport').textContent = document.getElementById('enrollPassport').value;
-
-            const enrollDate = formatDate(document.getElementById('enrollDate').value);
-            document.getElementById('previewEnrollDate').textContent = enrollDate;
+            document.getElementById('previewEnrollDate').textContent = formatDate(document.getElementById('enrollDate').value);
             document.getElementById('previewEnrollDeanName').textContent = deanName;
         }
 
-        // Helper function to format date
         function formatDate(dateString) {
             if (!dateString) return '___________';
             const date = new Date(dateString);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         }
 
-        // Set today's date and generate preview on load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('issueDate').value = today;
+            document.getElementById('enrollDate').value = today;
             generateDocument();
+            document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', generateDocument));
         });
     </script>
 </body>
